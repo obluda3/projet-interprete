@@ -11,9 +11,12 @@ class interprete:
                     "output": self.output_value,
                     "more": self.more_cond,
                     "equal": self.equal_cond,
-                    "less": self.less_cond
+                    "less": self.less_cond,
+                    "call": self.call,
+                    "func": self.func,
                 }
         self.variables = {}
+        self.functions = {}
     
     def eval(self,operand):
         if type(operand) == int:
@@ -23,10 +26,16 @@ class interprete:
         return self.exec_inst(operand)
 
     def add(self,operands):
-        return eval(operands[0]) + eval(operands[1])
+        return self.eval(operands[0]) + self.eval(operands[1])
 
     def minus(self,operands):
         return self.eval(operands[0]) - self.eval(operands[1])
+
+    def call(self, operands):
+        self.exec_sequence(self.functions[operands[0]])
+    
+    def func(self, operands):
+        self.functions[operands[0]] = operands[1]
 
     def times(self,operands):
         return self.eval(operands[0]) * self.eval(operands[1])
@@ -40,13 +49,13 @@ class interprete:
         return f(instruction[1:])
 
     def exec_sequence(self,seq):
-        for line in seq[1:]:
+        for line in seq:
             self.exec_inst(line)
 
     def while_sequence(self,args):
         cond = args[0]
         seq = args[1]
-        while eval(cond):
+        while self.eval(cond):
             self.exec_sequence(seq)
 
     def if_sequence(self,args):
