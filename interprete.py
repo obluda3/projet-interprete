@@ -14,15 +14,19 @@ class interprete:
                     "less": self.less_cond,
                     "call": self.call,
                     "func": self.func,
-                }
-        self.variables = {}
+                    "return": self.exit,
+                    }
+        self.stacks = [{}]
         self.functions = {}
+        self.returnval = 0
+        self.shouldReturn = False
     
     def eval(self,operand):
         if type(operand) == int:
             return operand
         if type(operand) == str:
-            return self.variables[operand]
+            return self.stacks[-1][operand]
+        
         return self.exec_inst(operand)
 
     def add(self,operands):
@@ -32,7 +36,14 @@ class interprete:
         return self.eval(operands[0]) - self.eval(operands[1])
 
     def call(self, operands):
-        self.exec_sequence(self.functions[operands[0]])
+        args = {}
+        for arg in operands[1]:
+            args[arg[0]] = self.eval(arg[1])
+        self.exec_sequence(self.functions[operands[0]], args, True)
+        return self.returnval;
+
+    def exit(self, operands):
+        self.returnval = self.eval(operands[0]);
     
     def func(self, operands):
         self.functions[operands[0]] = operands[1]
@@ -48,9 +59,25 @@ class interprete:
         f = self.op[inst]
         return f(instruction[1:])
 
-    def exec_sequence(self,seq):
+    def exec_sequence(self, seq, vars = {}, func = False):
+        # Mise en place des paramètres de la fonction
+        if func:
+            self.stacks.append(vars)
+        
         for line in seq:
+            if self.shouldReturn:
+                self.shouldReturn = not func # il faut continuer de return tant qu'on est dans notre fonction (si on est dans un if, ou un while, func = False)
+                break
             self.exec_inst(line)
+            if line[0] == "return":
+                self.shouldReturn = True
+
+        if self.shouldReturn:
+            self.shouldReturn = not func
+
+        if func:
+            self.stacks.pop()
+            
 
     def while_sequence(self,args):
         cond = args[0]
@@ -67,7 +94,7 @@ class interprete:
     def set_variable(self,args):
         name = args[0]
         value = self.eval(args[1])
-        self.variables[name] = value
+        self.stacks[-1][name] = value
 
     def more_cond(self,args):
         return self.eval(args[0]) > self.eval(args[1])
