@@ -65,6 +65,7 @@ def analyse(lines):
             tmp.append(var)
             tmp.append(analyse_arith(val))
             res.append(tmp)
+            
         if "output" in line:
             out = line[line.index("output")+7:]
             temp.append("output")
@@ -86,7 +87,7 @@ def analyse(lines):
             except:
                 valid = False
             if valid:
-                cond = parse_opPrio(line[line.index("if")+2:])
+                cond = parse_opPrio(line[line.index("if")+3:])
                 temp.append("if")
                 temp.append(cond)
                 lines2 = []
@@ -96,7 +97,7 @@ def analyse(lines):
                     lines2.append(line)
                     j += 1
                 out = analyse(lines2)
-                temp.append([out[0]])
+                temp.append(out)
             res.append(temp)
             i = j
 
