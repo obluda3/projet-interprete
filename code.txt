@@ -1,0 +1,28 @@
+func isprime 1
+j:2
+1if arg0=1
+return 0
+1endi
+1while j*j<arg0+1
+tmp:arg0/j
+tmp:tmp*j
+1if tmp=arg0
+return 0
+1endi
+j:j+1
+1endw
+return 1
+endf
+func printprimes 1
+i:1
+1while i<arg0+1
+call isprime i
+1if rval=1
+output i
+1endi
+i:i+1
+1endw
+endf
+a:20
+b:2*a
+call printprimes b

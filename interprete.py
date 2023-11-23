@@ -41,16 +41,20 @@ class interprete:
     def call(self, operands):
         vars = {}
         args = operands[1]
+        argCnt = self.functions[operands[0]][1]
+        if argCnt != len(args):
+            print("function call", self.functions[operands[0]][0], "expected", argCnt, "args, received", len(args))
+            return
         for i in range(len(args)):
             vars["arg"+str(i)] = self.eval(args[i])
-        self.exec_sequence(self.functions[operands[0]], vars, True)
+        self.exec_sequence(self.functions[operands[0]][0], vars, True)
         return self.returnval;
 
     def exit(self, operands):
         self.returnval = self.eval(operands[0]);
     
     def func(self, operands):
-        self.functions[operands[0]] = operands[1]
+        self.functions[operands[0]] = operands[1],operands[2]
 
     def times(self,operands):
         return self.eval(operands[0]) * self.eval(operands[1])
@@ -87,6 +91,8 @@ class interprete:
         seq = args[1]
         while self.eval(cond):
             self.exec_sequence(seq)
+            if self.shouldReturn:
+                break
 
     def if_sequence(self,args):
         cond = args[0]

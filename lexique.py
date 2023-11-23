@@ -117,12 +117,13 @@ def analyse(lines):
             i += blockLen + 1
         
         if "func" in line:
-            name = line[line.index("func")+5:]
+            name, cnt = line[line.index("func")+5:].split()
             temp.append("func")
             temp.append(name)
             scope, blockLen = getBlockLines(lines[i+1:], "", "endf")
             out = analyse(scope)
             temp.append(out)
+            temp.append(int(cnt))
             i += blockLen + 1
 
         if "return" in line:
