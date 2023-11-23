@@ -65,8 +65,12 @@ def analyse(lines):
     res = []
     i = 0
     while i < len(lines):
+        line = lines[i]
+        if "#" in line:
+            line = line[0:line.index("#")]
+        line = line.strip()
+
         temp = []
-        line = lines[i].strip()
         if ":" in line:
             var = line[0:line.index(":")]
             val = line[line.index(":")+1:]
@@ -137,8 +141,9 @@ def analyse(lines):
             temp.append(name)
             argList = [analyse_arith(arg) for arg in args.split(",")]
             temp.append(argList)
-
-        res.append(temp)
+        
+        if len(temp) > 0:
+            res.append(temp)
     
         i += 1
     return res
