@@ -25,6 +25,8 @@ class interprete:
         if type(operand) == int:
             return operand
         if type(operand) == str:
+            if operand == "rval":
+                return self.returnval
             return self.stacks[-1][operand]
         
         return self.exec_inst(operand)
@@ -36,10 +38,11 @@ class interprete:
         return self.eval(operands[0]) - self.eval(operands[1])
 
     def call(self, operands):
-        args = {}
-        for arg in operands[1]:
-            args[arg[0]] = self.eval(arg[1])
-        self.exec_sequence(self.functions[operands[0]], args, True)
+        vars = {}
+        args = operands[1]
+        for i in range(len(args)):
+            vars["arg"+str(i)] = self.eval(args[i])
+        self.exec_sequence(self.functions[operands[0]], vars, True)
         return self.returnval;
 
     def exit(self, operands):
@@ -78,7 +81,6 @@ class interprete:
         if func:
             self.stacks.pop()
             
-
     def while_sequence(self,args):
         cond = args[0]
         seq = args[1]

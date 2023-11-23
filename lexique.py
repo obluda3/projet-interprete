@@ -1,3 +1,11 @@
+def parseNumOrVar(s):
+    try:
+        return int(s)
+    except:
+        if s == "input":
+            return ["input"]
+        return s
+
 def analyse_arith(s):
     op = []
     operations = {
@@ -11,15 +19,10 @@ def analyse_arith(s):
         c = s[i]
         if c in operations.keys():
             op.insert(0, operations[c])
-            try:
-                op.append(int(s[numStart:i]))
-            except:
-                op.append(s[numStart:i])
+            op.append(parseNumOrVar(s[numStart:i]))
             numStart = i+1
-    try:
-        op.append(int(s[numStart:len(s)]))
-    except:
-        op.append(s[numStart:len(s)])
+
+    op.append(parseNumOrVar(s[numStart:len(s)]))
     cnt = 0
     for a in op:
         if a in operations.values():
@@ -51,6 +54,13 @@ def parse_opPrio(line):
     right = line[line.index(operator)+1:]
     return [operations[operator], analyse_arith(left), analyse_arith(right)]
 
+def getBlockLines(lines, ind, expr):
+    result = []
+    for j in range(len(lines)):
+        if ind+expr in lines[j]:
+             return result, j
+        result.append(lines[j])
+
 def analyse(lines):
     res = []
     i = 0
@@ -60,28 +70,20 @@ def analyse(lines):
         if ":" in line:
             var = line[0:line.index(":")]
             val = line[line.index(":")+1:]
-            tmp = []
-            tmp.append("set")
-            tmp.append(var)
-            tmp.append(analyse_arith(val))
-            res.append(tmp)
+            temp.append("set")
+            temp.append(var)
+            temp.append(analyse_arith(val))
             
         if "output" in line:
             out = line[line.index("output")+7:]
             temp.append("output")
             temp.append(analyse_arith(out))
-            res.append(temp)
-        
-        if "input" in line:
-            out = line[line.index("input")+5:]
-            temp.append("input")
-            temp.append(analyse_arith(out))
-            res.append(temp)
 
         if "if" in line:
             temp = []
             ind = line[0:line.index("if")]
             valid = True
+            blockLen = 0
             try:
                 int(ind)
             except:
@@ -90,20 +92,17 @@ def analyse(lines):
                 cond = parse_opPrio(line[line.index("if")+3:])
                 temp.append("if")
                 temp.append(cond)
-                lines2 = []
-                j = i+1
-                while ind+"endi" not in lines[j]:
-                    line = lines[j].strip()
-                    lines2.append(line)
-                    j += 1
-                out = analyse(lines2)
+                scope, blockLen = getBlockLines(lines[i+1:], ind, "endi")
+                out = analyse(scope)
                 temp.append(out)
-            res.append(temp)
-            i = j
+            else:
+                print("error line")
+            i += blockLen + 1
 
         if "while" in line:
             ind = line[0:line.index("while")]
             valid = True
+            blockLen = 0
             try:
                 int(ind)
             except:
@@ -112,17 +111,34 @@ def analyse(lines):
                 cond = parse_opPrio(line[line.index("while")+6:])
                 temp.append("while")
                 temp.append(cond)
-                j = i+1
-                lines2 = []
-                while ind+"endw" not in lines[j]:
-                    line = lines[j].strip()
-                    lines2.append(line)
-                    j += 1
-                out = analyse(lines2)
+                scope, blockLen = getBlockLines(lines[i+1:], ind, "endw")
+                out = analyse(scope)
                 temp.append(out)
-            res.append(temp)
-            i = j
+            i += blockLen + 1
+        
+        if "func" in line:
+            name = line[line.index("func")+5:]
+            temp.append("func")
+            temp.append(name)
+            scope, blockLen = getBlockLines(lines[i+1:], "", "endf")
+            out = analyse(scope)
+            temp.append(out)
+            i += blockLen + 1
 
+        if "return" in line:
+            temp.append("return")
+            temp.append(analyse_arith(line[line.index("return")+7:]))
+        
+        if "call" in line:
+            line = line[line.index("call")+5:]
+            name, args = line.split(" ")
+            temp.append("call")
+            temp.append(name)
+            argList = [analyse_arith(arg) for arg in args.split(",")]
+            temp.append(argList)
+
+        res.append(temp)
+    
         i += 1
     return res
 
