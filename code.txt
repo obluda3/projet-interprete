@@ -1,29 +1,26 @@
 func isprime 1
-    # Cette fonction permet de déterminer si un nombre donné est premier
-    j:2
-    # 1 n'est pas premier par convention
-    1if arg0=1
-        return 0
-    1endi
-
-    # on peut tester les diviseurs jusqu'a $\sqrt{arg_0}$
-    # il est inutile de tester au dela
-    1while j*j<arg0+1
-        tmp:arg0/j
-        tmp:tmp*j
-        1if tmp=arg0    # Si $\lfloor \frac{arg_0}{j} \rfloor \times j = arg_0$ 
-            return 0    # alors $j$ divise $arg_0$, et comme $j > 1$, $arg_0$ n'est pas premier
-        1endi
-        j:j+1
-    1endw
-    return 1
+    
 endf
 
 func printprimes 1
-    i:1
+    i:2
     1while i<arg0+1
-        call isprime i
-        1if rval=1
+        j:2
+        # 1 n'est pas premier par convention
+        r:1
+
+        # on peut tester les diviseurs jusqu'a $\sqrt{arg_0}$
+        # il est inutile de tester au dela
+        2while j*j<i+1
+            tmp:i/j
+            tmp:tmp*j
+            1if tmp=i       # Si $\lfloor \frac{i}{j} \rfloor \times j = i$ 
+                r:0    # alors $j$ divise $i$, et comme $j > 1$, $i$ n'est pas premier
+            1endi
+            j:j+1
+        2endw
+
+        1if r=1
             output i
         1endi
         i:i+1
