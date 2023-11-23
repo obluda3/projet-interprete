@@ -30,6 +30,5 @@ func printprimes 1
     1endw
 endf
 
-a:5*4
-a:a*5
+a:input
 call printprimes a

@@ -118,5 +118,5 @@ class interprete:
         print(self.eval(args[0]))
 
     def input(self,args):
-        value  = int(input("rentrez une valeur"))
+        value  = int(input("Entrez une valeur: "))
         return value
