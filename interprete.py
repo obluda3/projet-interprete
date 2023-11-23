@@ -15,6 +15,7 @@ class interprete:
                     "call": self.call,
                     "func": self.func,
                     "return": self.exit,
+                    "input": self.input,
                     }
         self.stacks = [{}]
         self.functions = {}
@@ -110,3 +111,6 @@ class interprete:
     def output_value(self,args):
         print(self.eval(args[0]))
 
+    def input(self,args):
+        value  = int(input("rentrez une valeur"))
+        return value
