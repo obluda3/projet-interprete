@@ -7,9 +7,9 @@ func printprimes 1
 
         # on peut tester les diviseurs jusqu'a $\sqrt{arg_0}$
         # il est inutile de tester au dela
-        1while j*j<i+1
+        1while j*j < i+1
             tmp:i/j
-            tmp:tmp*j
+            tmp:tmp * j
             if tmp=i   # Si $\lfloor \frac{i}{j} \rfloor \times j = i$ 
                 r:0    # alors $j$ divise $i$, et comme $j > 1$, $i$ n'est pas premier
             endi
