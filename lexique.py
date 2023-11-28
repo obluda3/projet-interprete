@@ -14,6 +14,7 @@ def analyse_arith(s):
         "/":"div",
         "-":"minus",
     }
+    s = s.replace(" ", "")
     numStart = 0
     for i in range(len(s)):
         c = s[i]
@@ -45,6 +46,7 @@ def parse_opPrio(line):
         ">":"more",
         "<":"less",
     }
+    line = line.replace(" ", "")
     operator = ""
     for op in operations:
         if op in line:
