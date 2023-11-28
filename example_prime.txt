@@ -1,30 +1,26 @@
-func isprime 1
-    
-endf
-
 func printprimes 1
     i:2
-    1while i<arg0+1
+    while i<arg0+1
         j:2
-        # 1 n'est pas premier par convention
+        # 1 n'est pas premier
         r:1
 
         # on peut tester les diviseurs jusqu'a $\sqrt{arg_0}$
         # il est inutile de tester au dela
-        2while j*j<i+1
+        1while j*j<i+1
             tmp:i/j
             tmp:tmp*j
-            1if tmp=i       # Si $\lfloor \frac{i}{j} \rfloor \times j = i$ 
+            if tmp=i   # Si $\lfloor \frac{i}{j} \rfloor \times j = i$ 
                 r:0    # alors $j$ divise $i$, et comme $j > 1$, $i$ n'est pas premier
-            1endi
+            endi
             j:j+1
-        2endw
+        1endw
 
-        1if r=1
+        if r=1
             output i
-        1endi
+        endi
         i:i+1
-    1endw
+    endw
 endf
 
 a:input
