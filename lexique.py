@@ -91,7 +91,7 @@ def analyse(lines):
             try:
                 int(ind)
             except:
-                valid = False
+                valid = ind == ""
             if valid:
                 cond = parse_opPrio(line[line.index("if")+3:])
                 temp.append("if")
@@ -110,7 +110,7 @@ def analyse(lines):
             try:
                 int(ind)
             except:
-                valid = False
+                valid = ind == ""
             if valid:
                 cond = parse_opPrio(line[line.index("while")+6:])
                 temp.append("while")
