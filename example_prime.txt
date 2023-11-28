@@ -1,3 +1,7 @@
+func isprime 1
+    
+endf
+
 func printprimes 1
     i:2
     1while i<arg0+1

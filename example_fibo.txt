@@ -1,0 +1,24 @@
+func fibo 1
+    if arg0=0
+        return 1
+    endif
+    if arg0=1
+        return 1
+    endif
+    result:0
+    call fibo arg0-1
+    result:result+rval
+    call fibo arg0-2
+    return result+rval
+endf
+
+func fiboPrinter 1
+    i:0
+    while i<arg0
+        call fibo i
+        output rval
+        i:i+1
+    endw
+endf
+
+call fiboPrinter 10
