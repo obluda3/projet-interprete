@@ -57,18 +57,22 @@ def parse_opPrio(line):
 def getBlockLines(lines, ind, expr):
     result = []
     for j in range(len(lines)):
-        if ind+expr in lines[j]:
+        line = sanatizeLine(lines[j])
+        if line.startswith(ind+expr):
              return result, j
         result.append(lines[j])
+
+def sanatizeLine(line):
+    if "#" in line:
+        line = line[0:line.index("#")]
+    line = line.strip()
+    return line
 
 def analyse(lines):
     res = []
     i = 0
     while i < len(lines):
-        line = lines[i]
-        if "#" in line:
-            line = line[0:line.index("#")]
-        line = line.strip()
+        line = sanatizeLine(lines[i])
 
         temp = []
         if ":" in line:
