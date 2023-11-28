@@ -6,8 +6,9 @@ def parseNumOrVar(s):
             return ["input"]
         return s
 
+
 def analyse_arith(s):
-    op = []
+    res = []
     operations = {
         "+":"add",
         "*":"mult",
@@ -15,30 +16,24 @@ def analyse_arith(s):
         "-":"minus",
     }
     s = s.replace(" ", "")
-    numStart = 0
-    for i in range(len(s)):
+    operand = ""
+
+    N = len(s)
+    i = N - 1
+    while i > -1:
         c = s[i]
         if c in operations.keys():
-            op.insert(0, operations[c])
-            op.append(parseNumOrVar(s[numStart:i]))
-            numStart = i+1
-
-    op.append(parseNumOrVar(s[numStart:len(s)]))
-    cnt = 0
-    for a in op:
-        if a in operations.values():
-            cnt += 1
-        else:
+            res.append(operations[c])
+            res.append(analyse_arith(s[0:i]))
+            res.append(parseNumOrVar(operand[::-1]))
+            operand = ""
             break
-    for i in range(cnt-1, 0, -1):
-        a = op[i:i+3]
-        op.pop(i+2)
-        op.pop(i+1)
-        op.pop(i)
-        op.insert(i, a)
-    if len(op) == 1:
-        return op[0]
-    return op
+        else:
+            operand += c
+        i -= 1
+    if operand != "":
+        return parseNumOrVar(operand[::-1])
+    return res
 
 def parse_opPrio(line):
     operations = {
@@ -158,3 +153,4 @@ def analyse(lines):
 # [if,[cond],[sequence]]
 
 #print(analyse("1if 421*2421*13 = 2 1endif"))
+print(analyse_arith("53/12"))
