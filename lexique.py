@@ -6,7 +6,6 @@ def parseNumOrVar(s):
             return ["input"]
         return s
 
-
 def analyse_arith(s):
     res = []
     operations = {
@@ -152,5 +151,4 @@ def analyse(lines):
 
 # [if,[cond],[sequence]]
 
-#print(analyse("1if 421*2421*13 = 2 1endif"))
-print(analyse_arith("53/12"))
+print(analyse_arith("512+52*12+632*4"))
