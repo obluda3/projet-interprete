@@ -67,7 +67,9 @@ func mystere 1
     while x < arg0
         x:x*2
         y:y+1
+    endw
     return y
+endf
 
 call mystere 20
 output rval
