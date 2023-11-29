@@ -142,10 +142,23 @@ def analyse(lines):
         
         if "call" in line:
             line = line[line.index("call")+5:]
-            name, args = line.split(" ")
+            splt = line.split(" ")
+            if len(splt) == 0:
+                raise Exception("Function name not specified: \'"+lines[i].strip()+"\'")
+            elif len(splt) == 1:
+                name = splt[0]
+                args = ""
+            elif len(splt) == 2:
+                name, args = line.split(" ")
+            else:
+                raise Exception("Invalid syntax (args need to be separated with ','): \'"+lines[i].strip()+"\'") 
+            
             temp.append("call")
             temp.append(name)
-            argList = [analyse_arith(arg) for arg in args.split(",")]
+            if args != "":
+                argList = [analyse_arith(arg) for arg in args.split(",")]
+            else:
+                argList = []
             temp.append(argList)
         
         if len(temp) > 0:

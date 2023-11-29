@@ -45,8 +45,7 @@ class interprete:
         args = operands[1]
         argCnt = self.functions[operands[0]][1]
         if argCnt != len(args):
-            print("function call", self.functions[operands[0]][0], "expected", argCnt, "args, received", len(args))
-            return
+            raise Exception("Function \'" + operands[0] + "\' called, expected " + str(argCnt) + " args, received " + str(len(args)))
         for i in range(len(args)):
             vars["arg"+str(i)] = self.eval(args[i])
         self.exec_sequence(self.functions[operands[0]][0], vars, True)
