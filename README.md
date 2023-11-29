@@ -56,7 +56,7 @@ Le projet se décompose en trois fichiers (en réalité deux), `main.py` est le 
         return arg0+arg1
     endf
     ```
-- Pour **appeler** une fonction, on utilise le mot-clé `call` suivi du nom de la fonction puis de ses arguments (séparés par des espaces).
+- Pour **appeler** une fonction, on utilise le mot-clé `call` suivi du nom de la fonction puis de ses arguments (séparés par des virgules).
 - Après l'**exécution** d'une fonction, son résultat est stocké dans la **variable globale** reservée `rval`.
 
 Pour tester votre compréhension du langage, voici un programme d'exemple:
@@ -75,5 +75,5 @@ call mystere 20
 output rval
 ```
 
-Celui-ci calcule la partie entière du logarithme binaire de 20.
+Celui-ci calcule (et affiche) la partie entière par excès du logarithme binaire de 20.
 
