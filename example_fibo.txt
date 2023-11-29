@@ -21,4 +21,4 @@ func fiboPrinter 1
     endw
 endf
 
-call fiboPrinter 10
+call fiboPrinter input

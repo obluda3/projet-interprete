@@ -28,7 +28,9 @@ class interprete:
         if type(operand) == str:
             if operand == "rval":
                 return self.returnval
-            return self.stacks[-1][operand]
+            if operand in self.stacks[-1]:
+                return self.stacks[-1][operand]
+            raise Exception("Invalid variable name: \'" + operand + "\'")
         
         return self.exec_inst(operand)
 

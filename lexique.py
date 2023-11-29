@@ -46,6 +46,8 @@ def parse_opPrio(line):
         if op in line:
             operator = op
             break
+    if operator == "":
+        raise Exception("No logical operator found in test: \'" + line + "\'")
     left = line[0:line.index(operator)]
     right = line[line.index(operator)+1:]
     return [operations[operator], analyse_arith(left), analyse_arith(right)]
@@ -57,6 +59,7 @@ def getBlockLines(lines, ind, expr):
         if line.startswith(ind+expr):
              return result, j
         result.append(lines[j])
+    raise Exception("\'"+ind+expr+"\' not found.")
 
 def sanatizeLine(line):
     if "#" in line:
@@ -121,6 +124,9 @@ def analyse(lines):
             i += blockLen + 1
         
         if "func" in line:
+            splt = line[line.index("func")+5:].split()
+            if len(splt) != 2:
+                raise Exception("Invalid function definition: \'" + lines[i].strip() + "\'" )
             name, cnt = line[line.index("func")+5:].split()
             temp.append("func")
             temp.append(name)
@@ -147,8 +153,3 @@ def analyse(lines):
     
         i += 1
     return res
-
-
-# [if,[cond],[sequence]]
-
-print(analyse_arith("512+52*12+632*4"))
