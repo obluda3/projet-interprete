@@ -41,6 +41,8 @@ class interprete:
         return self.eval(operands[0]) - self.eval(operands[1])
 
     def call(self, operands):
+        if operands[0] not in self.functions:
+            raise Exception("Function \'"+operands[0]+"' not found.")
         vars = {}
         args = operands[1]
         argCnt = self.functions[operands[0]][1]
